@@ -1,11 +1,15 @@
 import type { ToolItem } from "@/types/tools";
+import { BrandLogo } from "@/components/ui/BrandLogo";
 
 export function ToolCard({ tool }: { tool: ToolItem }) {
-  const { name, tagline, rating, difficulty, price, prosCons, ctaHref, ctaLabel, categories, tags } = tool;
+  const { name, tagline, rating, difficulty, price, prosCons, ctaHref, ctaLabel, categories, tags, logo } = tool;
   return (
     <div className="rounded-2xl border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 shadow-sm p-5 flex flex-col gap-4">
       <div className="flex items-center justify-between">
-        <h3 className="font-semibold">{name}</h3>
+        <div className="flex items-center gap-3 min-w-0">
+          <BrandLogo name={name} size={28} src={logo} />
+          <h3 className="font-semibold truncate">{name}</h3>
+        </div>
         <div className="flex items-center gap-2 text-xs">
           <span className="text-amber-500">★</span>
           <span className="font-medium">{rating.toFixed(1)}</span>
@@ -14,16 +18,22 @@ export function ToolCard({ tool }: { tool: ToolItem }) {
       </div>
       {(categories?.length || tags?.length) && (
         <div className="flex flex-wrap gap-2 text-xs">
-          {(categories ?? []).map((c) => (
-            <span key={c} className="px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
+          {((categories ?? []).map((c) => (
+            <span
+              key={c}
+              className="px-2 py-0.5 rounded-full border border-neutral-200 dark:border-neutral-700 bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300"
+            >
               {c}
             </span>
-          ))}
-          {(tags ?? []).map((t) => (
-            <span key={t} className="px-2 py-0.5 rounded-full bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300">
+          )))}
+          {((tags ?? []).map((t) => (
+            <span
+              key={t}
+              className="px-2 py-0.5 rounded-full border border-neutral-200 dark:border-neutral-700 bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300"
+            >
               {t}
             </span>
-          ))}
+          )))}
         </div>
       )}
       <p className="text-sm text-neutral-600 dark:text-neutral-400">{tagline}</p>
@@ -53,8 +63,8 @@ export function ToolCard({ tool }: { tool: ToolItem }) {
           rel="noopener noreferrer"
           className="inline-flex items-center gap-2 px-4 h-10 rounded-lg bg-blue-600 text-white hover:bg-blue-500"
         >
-          <span>⚡</span>
           {ctaLabel}
+          <span aria-hidden>↗</span>
         </a>
       </div>
     </div>

@@ -16,4 +16,5 @@ export type ToolItem = {
   keywords?: string[]; // searchable intents, tags, and use-cases
   categories?: string[]; // high-level facets, e.g., "Images", "Video", "Writing"
   tags?: string[]; // optional additional tags separate from keywords
+  logo?: string; // optional path under /public/images, e.g., "/images/chatgpt.svg"
 };
