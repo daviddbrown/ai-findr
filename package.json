@@ -4,11 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build",
-    "start": "next start",
+  "build": "node ./scripts/count-tools.mjs && next build",
+  "start": "node ./scripts/count-tools.mjs && next start",
     "lint": "next lint",
     "prod": "pnpm build && pnpm start",
-    "preview": "next build && next start"
+  "preview": "pnpm build && pnpm start"
   },
   "dependencies": {
     "next": "15.4.7",

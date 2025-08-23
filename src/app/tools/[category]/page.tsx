@@ -7,6 +7,7 @@ const VALID = new Set([
   "Research",
   "Transcription",
   "Automation",
+  "SEO",
   "Images",
   "Video",
   "Writing",
@@ -15,6 +16,9 @@ const VALID = new Set([
   "Presentations",
   "Audio",
   "Chat",
+  "Chatbots",
+  "Influencer",
+  "Monitoring",
 ]);
 
 export default async function CategoryPage({ params }: { params: Promise<{ category: string }> }) {

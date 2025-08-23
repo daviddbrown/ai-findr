@@ -1,8 +1,8 @@
 import type { LinkItem } from "@/types/links";
 
 export const site = {
-  name: "AI Findr",
-  description: "Discover insights faster with AI",
+  name: "aiFindr",
+  description: "Discover, compare, and choose the right AI tools for your workflow.",
   url: "https://example.com",
 };
 
@@ -14,5 +14,6 @@ export const headerLinks: LinkItem[] = [
 export const footerLinks: LinkItem[] = [
   { href: "/privacy", label: "Privacy" },
   { href: "/terms", label: "Terms" },
+  { href: "/affiliate-disclosure", label: "Affiliate Disclosure" },
   { href: "mailto:hello@example.com", label: "Contact", external: true },
 ];

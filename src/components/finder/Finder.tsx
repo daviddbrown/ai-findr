@@ -7,8 +7,17 @@ import { PopularChips } from "./PopularChips";
 import { ToolList } from "./ToolList";
 import { scoreTool } from "@/lib/search";
 
-export function Finder() {
-  const [query, setQuery] = useState("");
+type FinderProps = {
+  query?: string;
+  onQueryChange?: (q: string) => void;
+  category?: string | null; // optional category filter
+  compact?: boolean; // when true, do not render the internal hero/search area; just results
+};
+
+export function Finder({ query: controlledQuery, onQueryChange, category = null, compact = false }: FinderProps) {
+  const [internalQuery, setInternalQuery] = useState("");
+  const query = controlledQuery ?? internalQuery;
+  const setQuery = onQueryChange ?? setInternalQuery;
   const [sort, setSort] = useState<"best" | "rating" | "easy" | "price" | "name">("best");
 
   const difficultyRank = (d: string) => (d === "Easy" ? 0 : d === "Medium" ? 1 : 2);
@@ -23,8 +32,40 @@ export function Finder() {
 
   const filtered = useMemo(() => {
     const q = query.trim();
-    if (!q) return [];
-    const scored = tools
+    const base = category ? tools.filter((t) => (t.categories ?? []).includes(category)) : tools;
+
+    // If no query but category present, return category list sorted by current sort
+    if (!q) {
+      const items = base.map((item) => ({ item, score: 0 }));
+      const sortItems = () => {
+        switch (sort) {
+          case "rating":
+            return items.sort((a, b) => b.item.rating - a.item.rating).map((s) => s.item);
+          case "easy":
+            return items
+              .sort((a, b) => {
+                const da = difficultyRank(a.item.difficulty);
+                const db = difficultyRank(b.item.difficulty);
+                return da - db;
+              })
+              .map((s) => s.item);
+          case "price":
+            return items
+              .sort((a, b) => priceValue(a.item.price) - priceValue(b.item.price))
+              .map((s) => s.item);
+          case "name":
+            return items
+              .sort((a, b) => a.item.name.localeCompare(b.item.name, undefined, { sensitivity: "base" }))
+              .map((s) => s.item);
+          case "best":
+          default:
+            return items.sort((a, b) => b.item.rating - a.item.rating).map((s) => s.item);
+        }
+      };
+      return category ? sortItems() : [];
+    }
+
+    const scored = base
       .map((t) => ({ item: t, score: scoreTool(t, q) }))
       .filter((s) => s.score > 0);
 
@@ -67,48 +108,63 @@ export function Finder() {
     })();
 
     return sorted;
-  }, [query, sort]);
+  }, [query, sort, category]);
 
   return (
     <div className="w-full">
-      <div className="relative rounded-3xl bg-gradient-to-b from-blue-50 to-transparent dark:from-neutral-800/40 p-6 sm:p-10">
-        <div className="text-center">
-          <h1 className="text-3xl sm:text-4xl font-bold">AI Tool Finder</h1>
-          <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
-            Tell us what you want to do, we&apos;ll recommend the perfect AI tool
-          </p>
-        </div>
+      {!compact && (
+        <div className="relative rounded-3xl bg-gradient-to-b from-blue-50 to-transparent dark:from-neutral-800/40 p-6 sm:p-10">
+          <div className="text-center">
+            <h1 className="text-3xl sm:text-4xl font-bold">AI Tool Finder</h1>
+            <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
+              Tell us what you want to do, we&apos;ll recommend the perfect AI tool
+            </p>
+          </div>
 
-        <div className="mt-6">
-          <SearchBar value={query} onChange={setQuery} />
-        </div>
+          <div className="mt-6">
+            <SearchBar value={query} onChange={setQuery} />
+          </div>
 
-        <div className="mt-4">
-          <div className="text-center text-xs text-neutral-500 mb-3">Popular searches:</div>
-          <PopularChips onPick={setQuery} limit={8} />
+          <div className="mt-4">
+            <div className="text-center text-xs text-neutral-500 mb-3">Popular searches:</div>
+            <PopularChips onPick={setQuery} limit={8} />
+          </div>
         </div>
-      </div>
+      )}
 
-      <div className="mt-8">
+  <div id="results" className="mt-8">
         {query.trim() ? (
           filtered.length ? (
             <>
               <div className="mb-3 flex items-center justify-between gap-3">
-                <div className="font-semibold">Recommended AI Tools ({filtered.length})</div>
+                <div className="font-semibold">
+                  {category ? `${category} AI Tools` : "Recommended AI Tools"} ({filtered.length})
+                </div>
                 <div className="flex items-center gap-3 text-xs">
                   <label htmlFor="sort" className="text-neutral-500 dark:text-neutral-400">Sort by</label>
-                  <select
-                    id="sort"
-                    value={sort}
-                    onChange={(e) => setSort(e.target.value as typeof sort)}
-                    className="h-8 rounded-md border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 px-2"
-                  >
-                    <option value="best">Best match</option>
-                    <option value="rating">Highest rated</option>
-                    <option value="easy">Easiest first</option>
-                    <option value="price">Price: low to high</option>
-                    <option value="name">Name A–Z</option>
-                  </select>
+                  <div className="relative inline-block">
+                    <select
+                      id="sort"
+                      value={sort}
+                      onChange={(e) => setSort(e.target.value as typeof sort)}
+                      className="h-8 rounded-md border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 pl-2 pr-10 appearance-none"
+                    >
+                      <option value="best">Best match</option>
+                      <option value="rating">Highest rated</option>
+                      <option value="easy">Easiest first</option>
+                      <option value="price">Price: low to high</option>
+                      <option value="name">Name A–Z</option>
+                    </select>
+                    <svg
+                      aria-hidden="true"
+                      className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-neutral-500 dark:text-neutral-400"
+                      viewBox="0 0 20 20"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path d="M6 8l4 4 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </div>
                 </div>
               </div>
               <ToolList items={filtered} />

@@ -1,3 +1,11 @@
 @import "tailwindcss";
 
+:root {
+	--accent: #36baa2;
+}
+
+.dark :root {
+	--accent: #36baa2; /* keep same for now; easy to tweak later */
+}
+
 /* Tailwind v4 provides base, components, utilities out of the box. */

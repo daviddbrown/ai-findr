@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
@@ -6,6 +6,8 @@ import { Footer } from "@/components/layout/Footer";
 import { footerLinks, site } from "@/config/site";
 import React from "react";
 import { websiteSchema, toJsonLd } from "@/lib/seo";
+import { CookieConsent } from "@/components/legal/CookieConsent";
+import { ScrollTopOnMount } from "@/components/utility/ScrollTopOnMount";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,6 +38,12 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -46,10 +54,12 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased font-sans`}>
   <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: toJsonLd(websiteSchema(site)) }} />
         <div className="min-h-screen flex flex-col">
+          <ScrollTopOnMount />
           <Header />
           <main className="flex-1">{children}</main>
           <Footer links={footerLinks} />
         </div>
+  <CookieConsent />
       </body>
     </html>
   );
