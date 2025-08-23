@@ -22,7 +22,7 @@ export default function AffiliateDisclosurePage() {
         <h2>Questions</h2>
         <p>
           If you have any questions about this disclosure, contact us at {" "}
-          <a href="mailto:hello@example.com">hello@example.com</a>.
+          <a href="mailto:aifindrdotio@gmail.com">aifindrdotio@gmail.com</a>.
         </p>
       </article>
     </AppContainer>

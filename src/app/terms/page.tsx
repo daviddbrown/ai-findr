@@ -21,7 +21,7 @@ export default function TermsPage() {
           We are not liable for any damages arising from the use of this site or third‑party tools listed here.
         </p>
         <p>
-          For questions, contact <a href="mailto:hello@example.com">hello@example.com</a>.
+          For questions, contact <a href="mailto:aifindrdotio@gmail.com">aifindrdotio@gmail.com</a>.
         </p>
       </article>
     </AppContainer>

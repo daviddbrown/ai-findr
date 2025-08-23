@@ -17,7 +17,7 @@ export default function PrivacyPage() {
         </p>
         <h2>Contact</h2>
         <p>
-          If you have questions about this policy, contact us at <a href="mailto:hello@example.com">hello@example.com</a>.
+          If you have questions about this policy, contact us at <a href="mailto:aifindrdotio@gmail.com">aifindrdotio@gmail.com</a>.
         </p>
       </article>
     </AppContainer>

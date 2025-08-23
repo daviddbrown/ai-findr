@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
   "build": "node ./scripts/count-tools.mjs && next build",
-  "start": "node ./scripts/count-tools.mjs && next start",
+  "start": "node ./scripts/count-tools.mjs && next start -p ${PORT:-3000}",
     "lint": "next lint",
     "prod": "pnpm build && pnpm start",
   "preview": "pnpm build && pnpm start"

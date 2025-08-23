@@ -4,6 +4,10 @@ export const site = {
   name: "aiFindr",
   description: "Discover, compare, and choose the right AI tools for your workflow.",
   url: "https://example.com",
+  social: {
+    twitter: "",
+    linkedin: "",
+  },
 };
 
 export const headerLinks: LinkItem[] = [
@@ -14,6 +18,5 @@ export const headerLinks: LinkItem[] = [
 export const footerLinks: LinkItem[] = [
   { href: "/privacy", label: "Privacy" },
   { href: "/terms", label: "Terms" },
-  { href: "/affiliate-disclosure", label: "Affiliate Disclosure" },
-  { href: "mailto:hello@example.com", label: "Contact", external: true },
+  { href: "mailto:aifindrdotio@gmail.com", label: "Contact", external: true },
 ];
