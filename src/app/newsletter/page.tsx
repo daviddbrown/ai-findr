@@ -1,3 +1,13 @@
+import type { Metadata } from "next";
+import { site } from "@/config/site";
+
+export const metadata: Metadata = {
+  title: "Newsletter",
+  description: "Subscribe to get new AI tool discoveries and insights.",
+  alternates: { canonical: "/newsletter" },
+  openGraph: { images: [{ url: "/api/og?title=Newsletter", width: 1200, height: 630, alt: `${site.name} Newsletter` }] },
+  twitter: { images: [{ url: "/api/og?title=Newsletter", alt: `${site.name} Newsletter` }] },
+};
 import { AppContainer } from "@/components/layout/AppContainer";
 
 export default function NewsletterPage() {

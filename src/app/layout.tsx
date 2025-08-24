@@ -19,9 +19,15 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const googleVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION;
+const bingVerification = process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION;
+
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
-  title: site.name,
+  title: {
+    default: site.name,
+    template: "%s | " + site.name,
+  },
   description: site.description,
   openGraph: {
     title: site.name,
@@ -35,6 +41,10 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: site.name,
     description: site.description,
+  },
+  verification: {
+    google: googleVerification,
+    other: bingVerification ? { "msvalidate.01": bingVerification } : undefined,
   },
 };
 
@@ -51,7 +61,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased font-sans`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased font-sans text-neutral-100`}>
   <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: toJsonLd(websiteSchema(site)) }} />
         <div className="min-h-screen flex flex-col">
           <ScrollTopOnMount />

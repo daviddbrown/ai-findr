@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { tools } from "@/config/tools";
 import { SearchBar } from "./SearchBar";
 import { PopularChips } from "./PopularChips";
@@ -19,6 +19,7 @@ export function Finder({ query: controlledQuery, onQueryChange, category = null,
   const query = controlledQuery ?? internalQuery;
   const setQuery = onQueryChange ?? setInternalQuery;
   const [sort, setSort] = useState<"best" | "rating" | "easy" | "price" | "name">("best");
+  const [showAllResults, setShowAllResults] = useState(false);
 
   const difficultyRank = (d: string) => (d === "Easy" ? 0 : d === "Medium" ? 1 : 2);
   const priceValue = (p: string): number => {
@@ -62,7 +63,11 @@ export function Finder({ query: controlledQuery, onQueryChange, category = null,
             return items.sort((a, b) => b.item.rating - a.item.rating).map((s) => s.item);
         }
       };
-      return category ? sortItems() : [];
+      
+      // Limit categories with many tools to top 10 for better UX
+      const sorted = category ? sortItems() : [];
+      const shouldLimitResults = category && sorted.length > 12;
+      return shouldLimitResults ? sorted.slice(0, 10) : sorted;
     }
 
     const scored = base
@@ -107,13 +112,41 @@ export function Finder({ query: controlledQuery, onQueryChange, category = null,
       }
     })();
 
-    return sorted;
-  }, [query, sort, category]);
+    // For search results, limit to 10 unless user wants to see all
+    const shouldLimitSearchResults = q.trim() && sorted.length > 10 && !showAllResults;
+    return shouldLimitSearchResults ? sorted.slice(0, 10) : sorted;
+  }, [query, sort, category, showAllResults]);
+
+  // Reset showAllResults when query changes
+  useEffect(() => {
+    setShowAllResults(false);
+  }, [query]);
+
+  // Check if we're showing limited results for a category
+  const isShowingLimitedResults = useMemo(() => {
+    if (!category || query.trim()) return false;
+    const allInCategory = tools.filter((t) => (t.categories ?? []).includes(category));
+    return allInCategory.length > 12 && filtered.length === 10;
+  }, [category, query, filtered.length]);
+
+  // Check if there are more search results to show
+  const hasMoreSearchResults = useMemo(() => {
+    if (!query.trim() || showAllResults) return false;
+    
+    // Compute the full search results to see if we have more than 10
+    const q = query.trim();
+    const base = category ? tools.filter((t) => (t.categories ?? []).includes(category)) : tools;
+    const scored = base
+      .map((t) => ({ item: t, score: scoreTool(t, q) }))
+      .filter((s) => s.score > 0);
+    
+    return scored.length > 10;
+  }, [query, category, showAllResults]);
 
   return (
     <div className="w-full">
       {!compact && (
-        <div className="relative rounded-3xl bg-gradient-to-b from-blue-50 to-transparent dark:from-neutral-800/40 p-6 sm:p-10">
+  <div className="relative rounded-3xl bg-gradient-to-b from-[color-mix(in_oklab,var(--accent)_12%,transparent)] to-transparent dark:from-neutral-800/40 p-6 sm:p-10">
           <div className="text-center">
             <h1 className="text-3xl sm:text-4xl font-bold">AI Tool Finder</h1>
             <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
@@ -139,6 +172,11 @@ export function Finder({ query: controlledQuery, onQueryChange, category = null,
               <div className="mb-3 flex items-center justify-between gap-3">
                 <div className="font-semibold">
                   {category ? `${category} AI Tools` : "Recommended AI Tools"} ({filtered.length})
+                  {isShowingLimitedResults && (
+                    <span className="ml-2 text-xs text-neutral-500 dark:text-neutral-400 font-normal">
+                      • Top picks
+                    </span>
+                  )}
                 </div>
                 <div className="flex items-center gap-3 text-xs">
                   <label htmlFor="sort" className="text-neutral-500 dark:text-neutral-400">Sort by</label>
@@ -147,7 +185,7 @@ export function Finder({ query: controlledQuery, onQueryChange, category = null,
                       id="sort"
                       value={sort}
                       onChange={(e) => setSort(e.target.value as typeof sort)}
-                      className="h-8 rounded-md border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 pl-2 pr-10 appearance-none"
+                      className="h-8 rounded-md border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 pl-2 pr-10 appearance-none cursor-pointer"
                     >
                       <option value="best">Best match</option>
                       <option value="rating">Highest rated</option>
@@ -167,7 +205,17 @@ export function Finder({ query: controlledQuery, onQueryChange, category = null,
                   </div>
                 </div>
               </div>
-              <ToolList items={filtered} />
+              <ToolList items={filtered} revealKey={`${category ?? "all"}|${query}|${sort}`} />
+              {hasMoreSearchResults && (
+                <div className="mt-6 text-center">
+                  <button
+                    onClick={() => setShowAllResults(true)}
+                    className="px-6 py-2 text-sm font-medium text-[var(--accent)] border border-[var(--accent)] rounded-lg hover:bg-[var(--accent)] hover:text-white transition-colors cursor-pointer"
+                  >
+                    Show more results
+                  </button>
+                </div>
+              )}
             </>
           ) : (
             <div className="text-sm text-neutral-500 dark:text-neutral-400 text-center">

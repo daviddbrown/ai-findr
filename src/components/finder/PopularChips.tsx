@@ -14,7 +14,7 @@ export function PopularChips({
         <button
           key={c}
           onClick={() => onPick(c)}
-          className="px-3 py-1 rounded-full bg-white/70 dark:bg-neutral-800/60 border border-neutral-200 dark:border-neutral-800 text-xs hover:bg-blue-50 dark:hover:bg-neutral-800"
+          className="px-3 py-1 rounded-full bg-white/70 dark:bg-neutral-800/60 border border-neutral-200 dark:border-neutral-800 text-xs hover:bg-neutral-100 dark:hover:bg-neutral-800 cursor-pointer"
         >
           {c}
         </button>

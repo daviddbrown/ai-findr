@@ -1,3 +1,13 @@
+import type { Metadata } from "next";
+import { site } from "@/config/site";
+
+export const metadata: Metadata = {
+  title: "Submit a Tool",
+  description: "Submit your AI tool to be considered for inclusion on aiFindr.",
+  alternates: { canonical: "/submit" },
+  openGraph: { images: [{ url: "/api/og?title=Submit%20a%20Tool", width: 1200, height: 630, alt: `${site.name} Submit a Tool` }] },
+  twitter: { images: [{ url: "/api/og?title=Submit%20a%20Tool", alt: `${site.name} Submit a Tool` }] },
+};
 import { AppContainer } from "@/components/layout/AppContainer";
 
 export default function SubmitToolPage() {

@@ -13,13 +13,13 @@ export default function NotFound() {
         <div className="mt-6 flex items-center justify-center gap-3">
           <Link
             href="/"
-            className="inline-flex items-center rounded-md bg-[var(--accent,#36BAA2)] px-4 py-2 text-sm font-medium text-white hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--accent,#36BAA2)]"
+            className="inline-flex items-center rounded-md bg-[var(--accent,#36BAA2)] px-4 py-2 text-sm font-medium text-white hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--accent,#36BAA2)] cursor-pointer"
           >
             Go home
           </Link>
           <Link
             href="/#search"
-            className="inline-flex items-center rounded-md border border-neutral-300 px-4 py-2 text-sm font-medium hover:bg-neutral-50 dark:border-neutral-700 dark:hover:bg-neutral-800"
+            className="inline-flex items-center rounded-md border border-neutral-300 px-4 py-2 text-sm font-medium hover:bg-neutral-50 dark:border-neutral-700 dark:hover:bg-neutral-800 cursor-pointer"
           >
             Search tools
           </Link>

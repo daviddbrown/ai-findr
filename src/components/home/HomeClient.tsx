@@ -7,11 +7,11 @@ import { Finder } from "@/components/finder/Finder";
 export function HomeClient() {
   const [query, setQuery] = useState("");
   return (
-    <>
+    <div className="pb-16 sm:pb-20">
       <Hero query={query} setQuery={setQuery} />
       <div className="w-full max-w-4xl mx-auto">
         <Finder query={query} onQueryChange={setQuery} compact />
       </div>
-    </>
+    </div>
   );
 }

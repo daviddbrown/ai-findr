@@ -18,11 +18,11 @@ export function CookieConsent() {
       <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
         <p className="text-sm text-neutral-700 dark:text-neutral-300">
           We use cookies for basic functionality and to understand usage. By using this site, you agree to our
-          <a href="/privacy" className="underline underline-offset-4 ml-1">Privacy Policy</a>.
+          <a href="/privacy" className="underline underline-offset-4 ml-1 cursor-pointer">Privacy Policy</a>.
         </p>
         <div className="flex gap-2">
           <button
-            className="rounded-md border border-neutral-300 dark:border-neutral-700 px-3 py-1.5 text-sm text-neutral-700 dark:text-neutral-200 bg-transparent hover:bg-neutral-100/60 dark:hover:bg-neutral-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent,#36BAA2)]"
+            className="rounded-md border border-neutral-300 dark:border-neutral-700 px-3 py-1.5 text-sm text-neutral-700 dark:text-neutral-200 bg-transparent hover:bg-neutral-100/60 dark:hover:bg-neutral-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent,#36BAA2)] cursor-pointer"
             onClick={() => {
               try { localStorage.setItem("cookie-consent", "dismissed"); } catch {}
               setVisible(false);
@@ -31,7 +31,7 @@ export function CookieConsent() {
             Dismiss
           </button>
           <button
-            className="rounded-md bg-[var(--accent,#36BAA2)] px-3 py-1.5 text-sm text-white"
+            className="rounded-md bg-[var(--accent,#36BAA2)] px-3 py-1.5 text-sm text-white cursor-pointer"
             onClick={() => {
               try { localStorage.setItem("cookie-consent", "accepted"); } catch {}
               setVisible(false);

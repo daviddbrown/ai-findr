@@ -59,7 +59,7 @@ export function BrandLogo({ name, size = 28, slug, src }: Props) {
           aria-hidden
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={src} alt="" className="h-full w-full object-contain" />
+          <img src={src} alt={`${name} logo`} className="h-full w-full object-contain" />
         </div>
       );
     }

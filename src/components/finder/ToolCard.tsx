@@ -13,7 +13,16 @@ export function ToolCard({ tool }: { tool: ToolItem }) {
         <div className="flex items-center gap-2 text-xs">
           <span className="text-amber-500">★</span>
           <span className="font-medium">{rating.toFixed(1)}</span>
-          <span className="px-2 py-0.5 rounded-full bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300">{difficulty}</span>
+          <span
+            className="px-2 py-0.5 rounded-full border"
+            style={{
+              borderColor: "var(--accent)",
+              color: "var(--accent)",
+              backgroundColor: "color-mix(in oklab, var(--accent) 12%, transparent)",
+            }}
+          >
+            {difficulty}
+          </span>
         </div>
       </div>
       {(categories?.length || tags?.length) && (
@@ -39,7 +48,7 @@ export function ToolCard({ tool }: { tool: ToolItem }) {
       <p className="text-sm text-neutral-600 dark:text-neutral-400">{tagline}</p>
       <div className="grid grid-cols-2 gap-6 text-sm">
         <div>
-          <div className="text-green-600 font-semibold mb-1">Pros:</div>
+          <div className="font-semibold mb-1" style={{ color: "var(--accent)" }}>Pros:</div>
           <ul className="list-disc pl-5 space-y-1">
             {prosCons.pros.map((p) => (
               <li key={p}>{p}</li>
@@ -61,7 +70,7 @@ export function ToolCard({ tool }: { tool: ToolItem }) {
           href={ctaHref}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 px-4 h-10 rounded-lg bg-blue-600 text-white hover:bg-blue-500"
+          className="inline-flex items-center gap-2 px-4 h-10 rounded-lg btn-accent text-black hover:translate-y-[-1px] transition-transform cursor-pointer"
         >
           {ctaLabel}
           <span aria-hidden>↗</span>

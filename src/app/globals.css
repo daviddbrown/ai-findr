@@ -1,11 +1,45 @@
 @import "tailwindcss";
 
 :root {
-	--accent: #36baa2;
+	--accent: #36BAA2; /* Updated accent color */
+	--bg-start: #1a1a1a; /* Dark gradient start */
+	--bg-end: #2d2d2d;   /* Dark gradient end */
 }
 
 .dark :root {
-	--accent: #36baa2; /* keep same for now; easy to tweak later */
+	--accent: #36BAA2;
 }
 
 /* Tailwind v4 provides base, components, utilities out of the box. */
+
+/* App-wide background gradient and optional accent overlays */
+.bg-app {
+	background: linear-gradient(135deg, var(--bg-start) 0%, var(--bg-end) 100%);
+}
+
+/* Optional subtle radial accents for hero/cta sections */
+.bg-hero-accent {
+	background-image: radial-gradient(circle at 50% 20%, color-mix(in oklab, var(--accent) 20%, transparent) 0%, transparent 50%);
+}
+
+.bg-cta-accent {
+	background-image: radial-gradient(circle at 50% 80%, color-mix(in oklab, var(--accent) 20%, transparent) 0%, transparent 50%);
+}
+
+/* Accent button styling shared across CTAs */
+.btn-accent {
+	/* Solid accent without glow */
+	background: var(--accent);
+	color: #000;
+}
+/* Remove hover glow entirely by not defining a hover rule */
+
+/* Legal pages h3 padding fix */
+.prose h3 {
+	padding-block-start: 12px;
+}
+
+/* Legal pages paragraph padding fix */
+.prose p {
+	padding-block-start: 12px;
+}
