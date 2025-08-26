@@ -1,6 +1,7 @@
 "use client";
 
 import Script from "next/script";
+import { analyticsConfig } from "@/config/analytics";
 
 interface GoogleAnalyticsProps {
   ga4MeasurementId: string;
@@ -48,7 +49,10 @@ export const trackEvent = (
   parameters?: Record<string, string | number | boolean>
 ) => {
   if (typeof window !== "undefined" && window.gtag) {
-    window.gtag("event", eventName, parameters);
+    const payload = analyticsConfig.debug
+      ? { ...(parameters ?? {}), debug_mode: true }
+      : parameters;
+    window.gtag("event", eventName, payload);
   }
 };
 

@@ -50,6 +50,51 @@ analytics.affiliateClick(toolName, affiliateUrl, {
   value: 2.50, // Estimated commission value
   currency: 'USD'
 });
+## 3.1 Recommended Custom Dimensions (GA4)
+
+In GA Admin → Custom definitions, add the following event-scoped dimensions for richer reporting:
+
+- item_name
+- item_category
+- item_list_name
+- items_count
+- affiliate_url
+- element_id
+- search_term
+- results_count
+
+After creating, they’ll begin populating for new events (not retroactive).
+
+## 3.2 Ecommerce-style payloads (optional)
+
+If you want ecommerce reports, extend events with an `items` array:
+
+```ts
+// Example view_item with items[]
+trackEvent('view_item', {
+   items: [
+      {
+         item_id: 'chatgpt',
+         item_name: 'ChatGPT',
+         item_category: 'Writing',
+         price: 0,
+         item_variant: 'Free'
+      }
+   ]
+});
+```
+
+## 3.3 Lead-style affiliate conversion (optional)
+
+If you prefer leads over item selection, replace or complement `select_item` with `generate_lead` for affiliate clicks:
+
+```ts
+trackEvent('generate_lead', {
+   method: 'affiliate',
+   item_name: toolName,
+   affiliate_url: affiliateUrl
+});
+```
 ```
 
 ## 4. Privacy & Compliance

@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { site } from "@/config/site";
 import type { LinkItem } from "@/types/links";
@@ -103,6 +105,19 @@ export function Footer({ links = [] as LinkItem[] }) {
             <Link href="/affiliate-disclosure" className="text-neutral-300 hover:underline underline-offset-4 cursor-pointer">Affiliate Disclosure</Link>
             <Link href="/privacy" className="text-neutral-300 hover:underline underline-offset-4 cursor-pointer">Privacy Policy</Link>
             <Link href="/terms" className="text-neutral-300 hover:underline underline-offset-4 cursor-pointer">Terms of Service</Link>
+            <button
+              type="button"
+              className="text-neutral-300 hover:underline underline-offset-4 cursor-pointer"
+              onClick={() => {
+                try {
+                  // Toggle the CookieConsent manager
+                  const e = new CustomEvent("open-cookie-settings");
+                  window.dispatchEvent(e);
+                } catch {}
+              }}
+            >
+              Cookie Settings
+            </button>
           </div>
         </div>
       </div>
