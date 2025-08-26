@@ -5,9 +5,19 @@ export function toSlug(name: string): string {
 }
 
 export function fromSlug(slug: string): string {
-  return slug
+  const result = slug
     .replace(/-/g, " ")
     .replace(/\b\w/g, (m) => m.toUpperCase());
+  
+  // Handle common acronyms that should be all caps
+  const acronyms = ['Seo', 'Ui', 'Api', 'Ai'];
+  let fixed = result;
+  acronyms.forEach(acronym => {
+    const regex = new RegExp(`\\b${acronym}\\b`, 'g');
+    fixed = fixed.replace(regex, acronym.toUpperCase());
+  });
+  
+  return fixed;
 }
 
 export function getAllCategories(): string[] {
