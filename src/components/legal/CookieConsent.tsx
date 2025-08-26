@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { grantAnalyticsConsent } from "@/components/analytics/GoogleAnalytics";
 
 export function CookieConsent() {
   const [visible, setVisible] = useState(false);
@@ -34,6 +35,8 @@ export function CookieConsent() {
             className="rounded-md bg-[var(--accent,#36BAA2)] px-3 py-1.5 text-sm text-white cursor-pointer"
             onClick={() => {
               try { localStorage.setItem("cookie-consent", "accepted"); } catch {}
+              // Grant analytics consent
+              try { grantAnalyticsConsent(); } catch {}
               setVisible(false);
             }}
           >

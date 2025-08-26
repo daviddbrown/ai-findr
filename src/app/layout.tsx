@@ -4,10 +4,14 @@ import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { footerLinks, site } from "@/config/site";
-import React from "react";
+import React, { Suspense } from "react";
 import { websiteSchema, toJsonLd } from "@/lib/seo";
 import { CookieConsent } from "@/components/legal/CookieConsent";
 import { ScrollTopOnMount } from "@/components/utility/ScrollTopOnMount";
+import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
+import { analyticsConfig } from "@/config/analytics";
+import { Analytics } from "@vercel/analytics/react";
+import { PageViewTracker } from "@/components/analytics/PageViewTracker";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -62,14 +66,20 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased font-sans text-neutral-100`}>
-  <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: toJsonLd(websiteSchema(site)) }} />
+  {analyticsConfig.ga4MeasurementId && <GoogleAnalytics ga4MeasurementId={analyticsConfig.ga4MeasurementId} />}
+  {/* Track client-side navigations */}
+  <Suspense fallback={null}>
+    <PageViewTracker />
+  </Suspense>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: toJsonLd(websiteSchema(site)) }} />
         <div className="min-h-screen flex flex-col">
           <ScrollTopOnMount />
           <Header />
           <main className="flex-1">{children}</main>
           <Footer links={footerLinks} />
         </div>
-  <CookieConsent />
+        <CookieConsent />
+        <Analytics />
       </body>
     </html>
   );

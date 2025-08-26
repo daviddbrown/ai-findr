@@ -2,6 +2,10 @@
 import { SearchBar } from "@/components/finder/SearchBar";
 import { Reveal } from "@/components/utility/Reveal";
 import { StatCard } from "@/components/ui/StatCard";
+import { tools } from "@/config/tools";
+import { scoreTool } from "@/lib/search";
+import { analytics } from "@/components/analytics/GoogleAnalytics";
+import type { ToolItem } from "@/types/tools";
 
 const ACCENT = "#36BAA2"; // primary accent per request
 
@@ -15,6 +19,14 @@ export function Hero({
   const scrollToResults = () => {
     const el = document.getElementById("results");
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+  const submitSearch = () => {
+    const trimmed = query.trim();
+    if (trimmed.length >= 3) {
+      const results = (tools as ToolItem[]).filter((t) => scoreTool(t, trimmed) > 0);
+      analytics.searchPerformed(trimmed, results.length);
+    }
+    scrollToResults();
   };
 
   const row1 = ["Image Generation", "Copywriting", "Code Assistant", "Chatbots", "Data Analysis"];
@@ -53,7 +65,7 @@ export function Hero({
                   onChange={setQuery}
                   placeholder="Search AI tools, features, or use cases..."
                   showButton
-                  onSubmit={scrollToResults}
+                  onSubmit={submitSearch}
                   buttonLabel="Search"
                 />
               </div>

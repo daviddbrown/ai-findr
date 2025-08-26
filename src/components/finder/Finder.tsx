@@ -1,11 +1,12 @@
 "use client";
 
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import { tools } from "@/config/tools";
 import { SearchBar } from "./SearchBar";
 import { PopularChips } from "./PopularChips";
 import { ToolList } from "./ToolList";
 import { scoreTool } from "@/lib/search";
+import { analytics } from "@/components/analytics/GoogleAnalytics";
 
 type FinderProps = {
   query?: string;
@@ -20,6 +21,12 @@ export function Finder({ query: controlledQuery, onQueryChange, category = null,
   const setQuery = onQueryChange ?? setInternalQuery;
   const [sort, setSort] = useState<"best" | "rating" | "easy" | "price" | "name">("best");
   const [showAllResults, setShowAllResults] = useState(false);
+  const lastTrackedQueryRef = useRef<string>("");
+
+  const scrollToResults = () => {
+    const el = document.getElementById("results");
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   const difficultyRank = (d: string) => (d === "Easy" ? 0 : d === "Medium" ? 1 : 2);
   const priceValue = (p: string): number => {
@@ -122,6 +129,23 @@ export function Finder({ query: controlledQuery, onQueryChange, category = null,
     setShowAllResults(false);
   }, [query]);
 
+  // Track search queries on submit (debounced safeguard)
+  const trackSearch = (q: string) => {
+    const trimmed = q.trim();
+    if (!trimmed || trimmed.length < 3) return;
+    if (trimmed === lastTrackedQueryRef.current) return;
+
+    const base = category ? tools.filter((t) => (t.categories ?? []).includes(category)) : tools;
+    const results = base.filter((t) => scoreTool(t, trimmed) > 0);
+    analytics.searchPerformed(trimmed, results.length);
+    lastTrackedQueryRef.current = trimmed;
+  };
+
+  const handleSubmit = () => {
+    trackSearch(query);
+    scrollToResults();
+  };
+
   // Check if we're showing limited results for a category
   const isShowingLimitedResults = useMemo(() => {
     if (!category || query.trim()) return false;
@@ -132,21 +156,19 @@ export function Finder({ query: controlledQuery, onQueryChange, category = null,
   // Check if there are more search results to show
   const hasMoreSearchResults = useMemo(() => {
     if (!query.trim() || showAllResults) return false;
-    
     // Compute the full search results to see if we have more than 10
     const q = query.trim();
     const base = category ? tools.filter((t) => (t.categories ?? []).includes(category)) : tools;
     const scored = base
       .map((t) => ({ item: t, score: scoreTool(t, q) }))
       .filter((s) => s.score > 0);
-    
     return scored.length > 10;
   }, [query, category, showAllResults]);
 
   return (
     <div className="w-full">
       {!compact && (
-  <div className="relative rounded-3xl bg-gradient-to-b from-[color-mix(in_oklab,var(--accent)_12%,transparent)] to-transparent dark:from-neutral-800/40 p-6 sm:p-10">
+        <div className="relative rounded-3xl bg-gradient-to-b from-[color-mix(in_oklab,var(--accent)_12%,transparent)] to-transparent dark:from-neutral-800/40 p-6 sm:p-10">
           <div className="text-center">
             <h1 className="text-3xl sm:text-4xl font-bold">AI Tool Finder</h1>
             <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400">
@@ -155,17 +177,31 @@ export function Finder({ query: controlledQuery, onQueryChange, category = null,
           </div>
 
           <div className="mt-6">
-            <SearchBar value={query} onChange={setQuery} />
+            <SearchBar
+              value={query}
+              onChange={setQuery}
+              placeholder="Search AI tools, features, or use cases..."
+              showButton
+              onSubmit={handleSubmit}
+              buttonLabel="Search"
+            />
           </div>
 
           <div className="mt-4">
             <div className="text-center text-xs text-neutral-500 mb-3">Popular searches:</div>
-            <PopularChips onPick={setQuery} limit={8} />
+            <PopularChips
+              onPick={(label) => {
+                setQuery(label);
+                trackSearch(label);
+                scrollToResults();
+              }}
+              limit={8}
+            />
           </div>
         </div>
       )}
 
-  <div id="results" className="mt-8">
+      <div id="results" className="mt-8">
         {query.trim() ? (
           filtered.length ? (
             <>

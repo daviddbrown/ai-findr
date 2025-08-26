@@ -23,7 +23,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
         <nav aria-label="Breadcrumb" className="text-sm text-neutral-500">
           <Link href="/" className="hover:underline cursor-pointer">Home</Link>
           <span className="mx-1">/</span>
-          <Link href="/" className="hover:underline cursor-pointer">Tools</Link>
+          <Link href="/" className="hover:underline cursor-pointer">Categories</Link>
           <span className="mx-1">/</span>
           <span className="text-neutral-700 dark:text-neutral-300">{normalized}</span>
         </nav>
@@ -34,7 +34,11 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
           </p>
         </header>
         {items.length ? (
-          <CategoryToolList items={items} revealKey={`category:${normalized}`} />
+          <CategoryToolList 
+            items={items} 
+            revealKey={`category:${normalized}`}
+            categoryName={normalized}
+          />
         ) : (
           <div className="text-sm text-neutral-500 text-center">No tools yet for this category.</div>
         )}

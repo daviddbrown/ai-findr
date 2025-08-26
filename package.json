@@ -4,17 +4,18 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-  "build": "node ./scripts/count-tools.mjs && next build",
-  "start": "node ./scripts/count-tools.mjs && next start -p ${PORT:-3000}",
+    "build": "node ./scripts/count-tools.mjs && next build",
+    "start": "node ./scripts/count-tools.mjs && next start -p ${PORT:-3000}",
     "lint": "next lint",
     "prod": "pnpm build && pnpm start",
-  "preview": "pnpm build && pnpm start"
+    "preview": "pnpm build && pnpm start"
   },
   "dependencies": {
+    "@tabler/icons-react": "^3",
+    "@vercel/analytics": "^1.5.0",
     "next": "15.4.7",
     "react": "19.1.0",
-  "react-dom": "19.1.0",
-  "@tabler/icons-react": "^3"
+    "react-dom": "19.1.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
