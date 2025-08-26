@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { grantAnalyticsConsent } from "@/components/analytics/GoogleAnalytics";
+import { grantAnalyticsConsent, revokeAnalyticsConsent } from "@/components/analytics/GoogleAnalytics";
 
 export function CookieConsent() {
   const [visible, setVisible] = useState(false);
@@ -71,6 +71,7 @@ export function CookieConsent() {
             className="rounded-md border border-neutral-300 dark:border-neutral-700 px-3 py-1.5 text-sm text-neutral-700 dark:text-neutral-200 bg-transparent hover:bg-neutral-100/60 dark:hover:bg-neutral-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent,#36BAA2)] cursor-pointer"
             onClick={() => {
               try { localStorage.setItem("cookie-consent", "dismissed"); } catch {}
+              try { revokeAnalyticsConsent(); } catch {}
               setManageOpen(false);
             }}
           >

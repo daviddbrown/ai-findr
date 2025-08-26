@@ -1,8 +1,9 @@
 import type { MetadataRoute } from "next";
 import { site } from "@/config/site";
+import { getAllCategories, toSlug } from "@/lib/categories";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  return [
+  const staticEntries: MetadataRoute.Sitemap = [
     {
       url: site.url,
       lastModified: new Date(),
@@ -33,4 +34,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
   { url: `${site.url}/newsletter`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.2 },
   { url: `${site.url}/submit`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.2 },
   ];
+
+  const categories = getAllCategories();
+  const categoryEntries: MetadataRoute.Sitemap = categories.map((c) => ({
+    url: `${site.url}/tools/${toSlug(c)}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly",
+    priority: 0.5,
+  }));
+
+  return [...staticEntries, ...categoryEntries];
 }

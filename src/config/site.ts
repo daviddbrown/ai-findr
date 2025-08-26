@@ -3,7 +3,7 @@ import type { LinkItem } from "@/types/links";
 export const site = {
   name: "aiFindr",
   description: "Discover, compare, and choose the right AI tools for your workflow.",
-  url: "https://example.com",
+  url: "https://www.aifindr.io",
   social: {
     twitter: "",
     linkedin: "",

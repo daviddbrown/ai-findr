@@ -68,6 +68,18 @@ export const grantAnalyticsConsent = () => {
   }
 };
 
+// Revoke consent (set back to denied)
+export const revokeAnalyticsConsent = () => {
+  if (typeof window !== "undefined" && window.gtag) {
+    window.gtag('consent', 'update', {
+      ad_user_data: 'denied',
+      ad_personalization: 'denied',
+      ad_storage: 'denied',
+      analytics_storage: 'denied'
+    });
+  }
+};
+
 // Predefined tracking events for your AI tool site
 export const analytics = {
   // Tool interactions
