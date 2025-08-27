@@ -38,18 +38,18 @@ Vercel Analytics is automatically enabled when deployed to Vercel. No additional
 
 ### In Google Analytics 4
 1. Go to Admin → Events → Create Event
-2. Create conversion events for:
-   - `affiliate_click` (Primary goal)
-   - `email_signup` (Secondary goal)
+2. Create conversion events for (matching current code):
+   - `select_item` (Primary goal) — used for affiliate CTA clicks
+   - `sign_up` (Secondary goal) — used for future newsletter signups
 
 ### Conversion Values
 You can assign values to track estimated revenue:
-```typescript
+```ts
 // Example: Track affiliate click with estimated value
-analytics.affiliateClick(toolName, affiliateUrl, {
-  value: 2.50, // Estimated commission value
-  currency: 'USD'
-});
+analytics.affiliateClick(toolName, affiliateUrl);
+// In GA4, you can set up an event parameter mapping if sending values later.
+```
+
 ## 3.1 Recommended Custom Dimensions (GA4)
 
 In GA Admin → Custom definitions, add the following event-scoped dimensions for richer reporting:

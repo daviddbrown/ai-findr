@@ -35,7 +35,7 @@ export function CategoryToolList({
   
   return (
     <>
-      <ToolList items={displayItems} revealKey={revealKey} />
+  <ToolList items={displayItems} revealKey={revealKey} itemListName={categoryName} />
       {hasMore && !showAll && (
         <div className="mt-6 text-center">
           <button

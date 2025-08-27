@@ -2,16 +2,16 @@ import type { ToolItem } from "@/types/tools";
 import { BrandLogo } from "@/components/ui/BrandLogo";
 import { analytics } from "@/components/analytics/GoogleAnalytics";
 
-export function ToolCard({ tool }: { tool: ToolItem }) {
+export function ToolCard({ tool, listIndex, itemListName }: { tool: ToolItem; listIndex?: number; itemListName?: string }) {
   const { name, tagline, rating, difficulty, price, prosCons, ctaHref, ctaLabel, categories, tags, logo } = tool;
   
   const handleAffiliateClick = () => {
-    // Track the affiliate click
-    analytics.affiliateClick(name, ctaHref);
+  // Track the affiliate click (GA4 ecommerce-style)
+  analytics.affiliateClick(tool, { affiliateUrl: ctaHref, itemListName, index: listIndex });
     
     // Track tool view (if not already tracked)
     const primaryCategory = categories?.[0] || "Unknown";
-    analytics.toolViewed(name, primaryCategory);
+  analytics.toolViewed(tool, itemListName ?? primaryCategory);
   };
   
   return (

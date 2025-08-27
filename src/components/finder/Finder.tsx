@@ -241,7 +241,7 @@ export function Finder({ query: controlledQuery, onQueryChange, category = null,
                   </div>
                 </div>
               </div>
-              <ToolList items={filtered} revealKey={`${category ?? "all"}|${query}|${sort}`} />
+              <ToolList items={filtered} revealKey={`${category ?? "all"}|${query}|${sort}`} itemListName={category ?? undefined} />
               {hasMoreSearchResults && (
                 <div className="mt-6 text-center">
                   <button

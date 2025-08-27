@@ -2,6 +2,7 @@
 
 import Script from "next/script";
 import { analyticsConfig } from "@/config/analytics";
+import type { ToolItem } from "@/types/tools";
 
 interface GoogleAnalyticsProps {
   ga4MeasurementId: string;
@@ -44,9 +45,54 @@ declare global {
   }
 }
 
+// Helpers
+type GAItem = {
+  item_id: string;
+  item_name: string;
+  item_category?: string;
+  price?: number;
+  quantity?: number;
+  index?: number;
+};
+
+type GAParams = {
+  items?: GAItem[];
+  item_list_name?: string;
+  affiliate_url?: string;
+  page_title?: string;
+  page_location?: string;
+  page_path?: string;
+  search_term?: string;
+  results_count?: number;
+  [key: string]: string | number | boolean | GAItem[] | undefined;
+};
+
+const priceToNumber = (p?: string): number | undefined => {
+  if (!p) return undefined;
+  const lower = p.toLowerCase();
+  if (lower.includes("free")) return 0;
+  const matches = [...p.matchAll(/\$(\d+(?:\.\d+)?)/g)].map((m) => parseFloat(m[1]));
+  if (matches.length) return Math.min(...matches);
+  return undefined;
+};
+
+const toGaItem = (
+  tool: ToolItem,
+  opts?: { category?: string; price?: number; index?: number }
+) => {
+  return {
+    item_id: tool.id,
+    item_name: tool.name,
+    item_category: opts?.category ?? (tool.categories?.[0] || "Unknown"),
+    price: opts?.price ?? priceToNumber(tool.price) ?? 0,
+    quantity: 1,
+    ...(typeof opts?.index === "number" ? { index: opts.index } : {}),
+  };
+};
+
 export const trackEvent = (
   eventName: string,
-  parameters?: Record<string, string | number | boolean>
+  parameters?: GAParams
 ) => {
   if (typeof window !== "undefined" && window.gtag) {
     const payload = analyticsConfig.debug
@@ -83,21 +129,48 @@ export const revokeAnalyticsConsent = () => {
 // Predefined tracking events for your AI tool site
 export const analytics = {
   // Tool interactions
-  toolViewed: (toolName: string, category: string) => {
-    // GA4 recommended: view_item
-    // Note: Ecommerce reports prefer an `items` array; sending minimal shape here
+  toolViewed: (
+    toolOrName: ToolItem | string,
+    categoryOrList?: string
+  ) => {
+    // Supports legacy signature (name, category) and new (tool, item_list_name?)
+    if (typeof toolOrName === "string") {
+      // legacy fallback
+      trackEvent("view_item", {
+        item_name: toolOrName,
+        item_category: categoryOrList as string,
+      });
+      return;
+    }
+    const tool = toolOrName as ToolItem;
+    const item = toGaItem(tool);
     trackEvent("view_item", {
-      item_name: toolName,
-      item_category: category,
-      // items: [{ item_name: toolName, item_category: category }]
+      items: [item],
+      ...(categoryOrList ? { item_list_name: categoryOrList } : {}),
     });
   },
 
-  affiliateClick: (toolName: string, affiliateUrl: string) => {
-    // GA4 recommended closest: select_item (user selects an item from a list or detail)
+  affiliateClick: (
+    toolOrName: ToolItem | string,
+    affiliateOrCtx: string | { affiliateUrl: string; itemListName?: string; index?: number }
+  ) => {
+    // Supports legacy (name, affiliateUrl) and new (tool, { affiliateUrl, itemListName?, index? })
+    if (typeof toolOrName === "string") {
+      const toolName = toolOrName as string;
+      const affiliateUrl = affiliateOrCtx as string;
+      trackEvent("select_item", {
+        item_name: toolName,
+        affiliate_url: affiliateUrl,
+      });
+      return;
+    }
+    const tool = toolOrName as ToolItem;
+    const ctx = (affiliateOrCtx as { affiliateUrl: string; itemListName?: string; index?: number });
+    const item = toGaItem(tool, { index: ctx.index });
     trackEvent("select_item", {
-      item_name: toolName,
-      affiliate_url: affiliateUrl,
+      ...(ctx.itemListName ? { item_list_name: ctx.itemListName } : {}),
+      items: [item],
+      affiliate_url: ctx.affiliateUrl,
     });
   },
 

@@ -9,7 +9,24 @@ export function CookieConsent() {
   useEffect(() => {
     try {
       const seen = localStorage.getItem("cookie-consent");
-      if (!seen) setVisible(true);
+      if (!seen) {
+        setVisible(true);
+      } else if (seen === "accepted") {
+        // Restore previously granted consent on load and emit a page_view for the current page
+        try { grantAnalyticsConsent(); } catch {}
+        try {
+          const w = window as unknown as { gtag?: (...args: unknown[]) => void };
+          if (typeof w.gtag === "function") {
+            const href = window.location.href;
+            const path = window.location.pathname + window.location.search;
+            w.gtag("event", "page_view", {
+              page_title: document.title,
+              page_location: href,
+              page_path: path,
+            });
+          }
+        } catch {}
+      }
     } catch {}
 
   const handler = () => setManageOpen(true);
@@ -42,6 +59,19 @@ export function CookieConsent() {
               try { localStorage.setItem("cookie-consent", "accepted"); } catch {}
               // Grant analytics consent
               try { grantAnalyticsConsent(); } catch {}
+              // Fire a page_view immediately so the current page is recorded post-consent
+              try {
+                const w = window as unknown as { gtag?: (...args: unknown[]) => void };
+                if (typeof w.gtag === "function") {
+                  const href = window.location.href;
+                  const path = window.location.pathname + window.location.search;
+                  w.gtag("event", "page_view", {
+                    page_title: document.title,
+                    page_location: href,
+                    page_path: path,
+                  });
+                }
+              } catch {}
               setVisible(false);
             }}
           >
@@ -82,6 +112,19 @@ export function CookieConsent() {
             onClick={() => {
               try { localStorage.setItem("cookie-consent", "accepted"); } catch {}
               try { grantAnalyticsConsent(); } catch {}
+              // Fire a page_view immediately so the current page is recorded post-consent
+              try {
+                const w = window as unknown as { gtag?: (...args: unknown[]) => void };
+                if (typeof w.gtag === "function") {
+                  const href = window.location.href;
+                  const path = window.location.pathname + window.location.search;
+                  w.gtag("event", "page_view", {
+                    page_title: document.title,
+                    page_location: href,
+                    page_path: path,
+                  });
+                }
+              } catch {}
               setManageOpen(false);
             }}
           >
