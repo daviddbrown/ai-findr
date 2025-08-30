@@ -5,8 +5,9 @@ export const site = {
   description: "Discover, compare, and choose the right AI tools for your workflow.",
   url: "https://www.aifindr.io",
   social: {
-    twitter: "",
-    linkedin: "",
+  // TODO: set your real profiles to strengthen Organization schema signals
+  twitter: "", // e.g. https://twitter.com/aifindr
+  linkedin: "", // e.g. https://www.linkedin.com/company/aifindr
   },
 };
 

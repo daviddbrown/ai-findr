@@ -1,5 +1,7 @@
 ## AI Findr
 
+Live: https://www.aifindr.io
+
 Minimal Next.js app with a modular component structure.
 
 Development

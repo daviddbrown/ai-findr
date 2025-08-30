@@ -48,6 +48,35 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
             }),
           }}
         />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: toJsonLd({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                {
+                  "@type": "ListItem",
+                  position: 1,
+                  name: "Home",
+                  item: site.url,
+                },
+                {
+                  "@type": "ListItem",
+                  position: 2,
+                  name: "Categories",
+                  item: `${site.url}/`,
+                },
+                {
+                  "@type": "ListItem",
+                  position: 3,
+                  name: normalized,
+                  item: `${site.url}/tools/${toSlug(normalized)}`,
+                },
+              ],
+            }),
+          }}
+        />
         <nav aria-label="Breadcrumb" className="text-sm text-neutral-500">
           <Link href="/" className="hover:underline cursor-pointer">Home</Link>
           <span className="mx-1">/</span>
