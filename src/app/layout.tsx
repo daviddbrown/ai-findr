@@ -5,7 +5,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { footerLinks, site } from "@/config/site";
 import React, { Suspense } from "react";
-import { websiteSchema, toJsonLd } from "@/lib/seo";
+import { websiteSchema, organizationSchema, toJsonLd } from "@/lib/seo";
 import { CookieConsent } from "@/components/legal/CookieConsent";
 import { ScrollTopOnMount } from "@/components/utility/ScrollTopOnMount";
 import { GoogleAnalytics } from "@/components/analytics/GoogleAnalytics";
@@ -72,6 +72,15 @@ export default function RootLayout({
     <PageViewTracker />
   </Suspense>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: toJsonLd(websiteSchema(site)) }} />
+        {(() => {
+          const sameAs = [site.social?.twitter, site.social?.linkedin].filter(Boolean) as string[];
+          return (
+            <script
+              type="application/ld+json"
+              dangerouslySetInnerHTML={{ __html: toJsonLd(organizationSchema(site, { sameAs })) }}
+            />
+          );
+        })()}
         <div className="min-h-screen flex flex-col">
           <ScrollTopOnMount />
           <Header />

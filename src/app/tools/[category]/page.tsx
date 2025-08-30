@@ -6,6 +6,7 @@ import { fromSlug, toSlug, getAllCategories } from "@/lib/categories";
 import { site } from "@/config/site";
 import { CategoryToolList } from "@/components/finder/CategoryToolList";
 import { AppContainer } from "@/components/layout/AppContainer";
+import { toJsonLd } from "@/lib/seo";
 
 const VALID = new Set(getAllCategories());
 
@@ -20,6 +21,33 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
   return (
     <AppContainer>
       <div className="space-y-6">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: toJsonLd({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              mainEntity: [
+                {
+                  "@type": "Question",
+                  name: `What are the best ${normalized} AI tools?`,
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: `We curate top ${normalized} AI tools and keep this list updated. Compare features, pricing, and ease-of-use to pick the right option for your workflow.`,
+                  },
+                },
+                {
+                  "@type": "Question",
+                  name: `How do I choose a ${normalized} AI tool?`,
+                  acceptedAnswer: {
+                    "@type": "Answer",
+                    text: `Start with your use case, then weigh ease-of-use, pricing, and integrations. Try a free plan if available and review alternatives in this category.`,
+                  },
+                },
+              ],
+            }),
+          }}
+        />
         <nav aria-label="Breadcrumb" className="text-sm text-neutral-500">
           <Link href="/" className="hover:underline cursor-pointer">Home</Link>
           <span className="mx-1">/</span>

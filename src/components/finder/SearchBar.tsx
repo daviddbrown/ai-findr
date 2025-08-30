@@ -33,7 +33,7 @@ export function SearchBar({
         <button
           type="button"
           onClick={onSubmit}
-          className="absolute right-1 top-1 h-10 px-4 rounded-lg text-white font-medium cursor-pointer"
+          className="absolute right-1 top-1 h-10 px-4 rounded-lg text-white font-medium cursor-pointer shadow-sm transition-colors hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)]/40"
           style={{ backgroundColor: "var(--accent)" }}
         >
           {buttonLabel}

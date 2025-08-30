@@ -1,6 +1,8 @@
 import type { MetadataRoute } from "next";
 import { site } from "@/config/site";
 import { getAllCategories, toSlug } from "@/lib/categories";
+import fs from "node:fs";
+import path from "node:path";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticEntries: MetadataRoute.Sitemap = [
@@ -43,5 +45,33 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.5,
   }));
 
-  return [...staticEntries, ...categoryEntries];
+  // Discover blog posts automatically by scanning the blog directory
+  const blogDir = path.join(process.cwd(), "src", "app", "blog");
+  const blogEntries: MetadataRoute.Sitemap = [];
+  try {
+    const items = fs.readdirSync(blogDir, { withFileTypes: true });
+    for (const entry of items) {
+      if (entry.isDirectory()) {
+        const pagePath = path.join(blogDir, entry.name, "page.tsx");
+        if (fs.existsSync(pagePath)) {
+          blogEntries.push({
+            url: `${site.url}/blog/${entry.name}`,
+            lastModified: new Date(),
+            changeFrequency: "monthly",
+            priority: 0.3,
+          });
+        }
+      }
+    }
+  } catch {
+    // Fallback: include known post(s)
+    blogEntries.push({
+      url: `${site.url}/blog/best-ai-tools-for-product-images`,
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.3,
+    });
+  }
+
+  return [...staticEntries, ...categoryEntries, ...blogEntries];
 }

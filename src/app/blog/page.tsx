@@ -15,7 +15,12 @@ export default function BlogIndexPage() {
     <AppContainer>
       <article className="w-full max-w-3xl prose prose-neutral dark:prose-invert prose-a:text-[var(--accent,#36BAA2)]">
         <h1>Blog</h1>
-        <p>Posts are coming soon.</p>
+        <p>Latest posts:</p>
+        <ul>
+          <li>
+            <a href="/blog/best-ai-tools-for-product-images">Best AI Tools for Product Images (2025)</a>
+          </li>
+        </ul>
       </article>
     </AppContainer>
   );
