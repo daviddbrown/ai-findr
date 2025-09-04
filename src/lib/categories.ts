@@ -1,10 +1,25 @@
 import { tools } from "@/config/tools";
 
+// Slug aliases -> canonical category names
+// Keys must be lowercase, hyphenated slugs.
+export const CATEGORY_ALIASES: Record<string, string> = {
+  // Fix 404s for popular synonyms
+  "data-analysis": "Analytics",
+  // add more aliases over time as needed
+};
+
 export function toSlug(name: string): string {
   return name.toLowerCase().replace(/\s+/g, "-");
 }
 
 export function fromSlug(slug: string): string {
+  // First, normalize and resolve alias to canonical category name if present
+  const key = slug
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, "-");
+  if (CATEGORY_ALIASES[key]) return CATEGORY_ALIASES[key];
+
   const result = slug
     .replace(/-/g, " ")
     .replace(/\b\w/g, (m) => m.toUpperCase());

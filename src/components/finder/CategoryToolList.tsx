@@ -34,8 +34,8 @@ export function CategoryToolList({
   };
   
   return (
-    <>
-  <ToolList items={displayItems} revealKey={revealKey} itemListName={categoryName} />
+    <div className="w-full max-w-4xl mx-auto">
+      <ToolList items={displayItems} revealKey={revealKey} itemListName={categoryName} />
       {hasMore && !showAll && (
         <div className="mt-6 text-center">
           <button
@@ -46,6 +46,6 @@ export function CategoryToolList({
           </button>
         </div>
       )}
-    </>
+    </div>
   );
 }

@@ -1,13 +1,25 @@
 @import "tailwindcss";
 
+/*
+  Light/Dark theme variables driven by the user's OS preference.
+  We default to light values and override in dark mode via media query —
+  no JavaScript or class toggle is required.
+*/
 :root {
-	--accent: #36BAA2; /* Updated accent color */
-	--bg-start: #1a1a1a; /* Dark gradient start */
-	--bg-end: #2d2d2d;   /* Dark gradient end */
+	--accent: #36BAA2;
+	/* Light gradient */
+	--bg-start: #f8fafc; /* slate-50-ish */
+	--bg-end: #eef2f7;   /* slate-100-ish */
+	/* Hint to the browser for form controls/scrollbars */
+	color-scheme: light dark;
 }
 
-.dark :root {
-	--accent: #36BAA2;
+@media (prefers-color-scheme: dark) {
+	:root {
+		/* Dark gradient */
+		--bg-start: #1a1a1a;
+		--bg-end: #2d2d2d;
+	}
 }
 
 /* Tailwind v4 provides base, components, utilities out of the box. */
@@ -30,9 +42,18 @@
 .btn-accent {
 	/* Solid accent without glow */
 	background: var(--accent);
-	color: #000;
+	color: #fff;
 }
 /* Remove hover glow entirely by not defining a hover rule */
+
+/* Hide scrollbars but keep scrolling (WebKit + Firefox) */
+.no-scrollbar {
+	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none; /* Firefox */
+}
+.no-scrollbar::-webkit-scrollbar {
+	display: none; /* Chrome, Safari */
+}
 
 /* Legal pages h3 padding fix */
 .prose h3 {

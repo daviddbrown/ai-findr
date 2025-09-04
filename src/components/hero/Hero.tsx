@@ -29,7 +29,7 @@ export function Hero({
     scrollToResults();
   };
 
-  const row1 = ["Image Generation", "Copywriting", "Code Assistant", "Chatbots", "Data Analysis"];
+  const row1 = ["Image Generation", "Copywriting", "Code Assistant", "Chatbots", "Analytics"];
   const row2 = ["Video Creation", "Automation", "SEO Tools", "Influencer", "Monitoring"];
 
   const chipBase =
@@ -59,7 +59,7 @@ export function Hero({
         <Reveal delayMs={140}>
           <div className="mt-8">
             <div className="mx-auto max-w-3xl">
-              <div className="relative rounded-2xl shadow-[0_6px_0_rgba(0,0,0,0.05)]">
+              <div className="relative max-w-2xl mx-auto rounded-xl shadow-[0_4px_0_rgba(0,0,0,0.06)]">
                 <SearchBar
                   value={query}
                   onChange={setQuery}

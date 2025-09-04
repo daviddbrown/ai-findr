@@ -65,7 +65,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased font-sans text-neutral-100`}>
+      {/* data-theme left here for future manual override; default follows OS */}
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased font-sans`}>
   {analyticsConfig.ga4MeasurementId && <GoogleAnalytics ga4MeasurementId={analyticsConfig.ga4MeasurementId} />}
   {/* Track client-side navigations */}
   <Suspense fallback={null}>

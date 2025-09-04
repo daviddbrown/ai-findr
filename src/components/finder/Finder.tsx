@@ -202,6 +202,7 @@ export function Finder({ query: controlledQuery, onQueryChange, category = null,
       )}
 
       <div id="results" className="mt-8">
+        <div className="px-4 sm:px-6">
         {query.trim() ? (
           filtered.length ? (
             <>
@@ -221,7 +222,7 @@ export function Finder({ query: controlledQuery, onQueryChange, category = null,
                       id="sort"
                       value={sort}
                       onChange={(e) => setSort(e.target.value as typeof sort)}
-                      className="h-8 rounded-md border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 pl-2 pr-10 appearance-none cursor-pointer"
+                      className="h-8 rounded-md border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 text-neutral-800 dark:text-neutral-200 pl-2 pr-10 appearance-none cursor-pointer"
                     >
                       <option value="best">Best match</option>
                       <option value="rating">Highest rated</option>
@@ -259,6 +260,7 @@ export function Finder({ query: controlledQuery, onQueryChange, category = null,
             </div>
           )
         ) : null}
+        </div>
       </div>
     </div>
   );

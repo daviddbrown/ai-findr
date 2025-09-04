@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { tools } from "@/config/tools";
-import { fromSlug, toSlug, getAllCategories } from "@/lib/categories";
+import { fromSlug, toSlug, getAllCategories, CATEGORY_ALIASES } from "@/lib/categories";
 import { site } from "@/config/site";
 import { CategoryToolList } from "@/components/finder/CategoryToolList";
 import { AppContainer } from "@/components/layout/AppContainer";
@@ -20,7 +20,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
 
   return (
     <AppContainer>
-      <div className="space-y-6">
+      <div className="w-full space-y-6">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -64,8 +64,8 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
                 {
                   "@type": "ListItem",
                   position: 2,
-                  name: "Categories",
-                  item: `${site.url}/`,
+                  name: "Tools",
+                  item: `${site.url}/tools`,
                 },
                 {
                   "@type": "ListItem",
@@ -77,14 +77,16 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
             }),
           }}
         />
-        <nav aria-label="Breadcrumb" className="text-sm text-neutral-500">
-          <Link href="/" className="hover:underline cursor-pointer">Home</Link>
-          <span className="mx-1">/</span>
-          <Link href="/" className="hover:underline cursor-pointer">Categories</Link>
-          <span className="mx-1">/</span>
-          <span className="text-neutral-700 dark:text-neutral-300">{normalized}</span>
-        </nav>
-        <header className="text-center">
+        <div className="w-full max-w-4xl mx-auto px-4 sm:px-6">
+          <nav aria-label="Breadcrumb" className="text-sm text-neutral-500">
+            <Link href="/" className="hover:underline cursor-pointer">Home</Link>
+            <span className="mx-1">/</span>
+            <Link href="/tools" className="hover:underline cursor-pointer">Tools</Link>
+            <span className="mx-1">/</span>
+            <span className="text-neutral-700 dark:text-neutral-300">{normalized}</span>
+          </nav>
+        </div>
+        <header className="text-center w-full max-w-4xl mx-auto px-4 sm:px-6">
           <h1 className="text-3xl font-bold">Best {normalized} AI Tools</h1>
           <p className="mt-2 text-neutral-600 dark:text-neutral-400">
             Curated tools in the {normalized} category.
@@ -127,5 +129,10 @@ export async function generateMetadata(
 }
 
 export async function generateStaticParams() {
-  return Array.from(VALID).map((v) => ({ category: toSlug(v) }));
+  const canonical = Array.from(VALID).map((v) => ({ category: toSlug(v) }));
+  const aliases = Object.keys(CATEGORY_ALIASES).map((slug) => ({ category: slug }));
+  return [...canonical, ...aliases];
 }
+
+// Allow params outside of generateStaticParams to resolve at runtime if needed
+export const dynamicParams = true;

@@ -4,24 +4,29 @@ import Link from "next/link";
 import { site } from "@/config/site";
 import type { LinkItem } from "@/types/links";
 import React from "react";
+import { getAllCategories, toSlug } from "@/lib/categories";
 
-function toSlug(name: string) {
-  return name.toLowerCase().replace(/\s+/g, "-");
-}
+// keep local helper only if needed; prefer shared toSlug
+// function toSlug(name: string) {
+//   return name.toLowerCase().replace(/\s+/g, "-");
+// }
 
 export function Footer({ links = [] as LinkItem[] }) {
-  // Tools (actual supported categories)
-  const categories = ["Writing", "Images", "Video", "Coding", "SEO", "Automation"];
+  // Tools (actual supported categories) — filter by what's really available
+  const supported = new Set(getAllCategories());
+  const categories = ["Writing", "Images", "Video", "Coding", "SEO", "Automation"].filter(
+    (c) => supported.has(c)
+  );
 
   // Popular (additional high-intent categories)
   const popular = [
     "Chatbots",
-    "Data Analysis",
-    "Design Tools",
+    "Analytics", // formerly "Data Analysis"
+    "Design",
     "Productivity",
     "Marketing",
     "Research",
-  ];
+  ].filter((c) => supported.has(c));
 
   // Resources (temporarily disabled)
 

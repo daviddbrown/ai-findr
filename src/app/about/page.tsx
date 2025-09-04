@@ -99,7 +99,7 @@ export default function AboutPage() {
     <p className="mt-4 sm:mt-5 max-w-2xl mx-auto text-neutral-600 dark:text-neutral-300 text-lg">Join our community and start exploring the tools that will transform your workflow.</p>
           </Reveal>
           <Reveal delayMs={140}>
-  <Link href="/" className="mt-6 sm:mt-8 inline-flex items-center gap-2 rounded-full px-6 py-3 font-semibold text-base bg-[color:var(--accent,#36BAA2)] text-black shadow hover:translate-y-[-2px] active:translate-y-[0] transition-transform cursor-pointer">
+  <Link href="/" className="mt-6 sm:mt-8 inline-flex items-center gap-2 rounded-full px-6 py-3 font-semibold text-base bg-[color:var(--accent,#36BAA2)] text-white shadow hover:translate-y-[-2px] active:translate-y-[0] transition-transform cursor-pointer">
         <IconRocket size={20} aria-hidden />
               Explore Tools
             </Link>

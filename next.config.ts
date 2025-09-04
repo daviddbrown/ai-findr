@@ -10,6 +10,11 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        source: '/tools/data-analysis',
+        destination: '/tools/analytics',
+        permanent: true,
+      },
+      {
         source: '/tools/ai-tools',
         destination: '/',
         permanent: true,
